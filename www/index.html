@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Peepnee</title>
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+		<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+		
+		
+		<script src="Scripts/jquery.signalR-2.2.2.min.js"></script>
+		<script src="signalr/hubs"></script>
+		
+		
+		<script>
+			window.onload=function(){
+				document.getElementById('connect-signalr').addEventListener('click', connectSignalR);
+			}
+			
+			function connectSignalR(){
+				alert('Connecting to signalr ...')
+			}
+			
+			$(function ()
+			{
+				jQuery.support.cors = true;
+				$.connection.hub.url = "http://localhost:54036/";
+				$.connection.hub.qs = { 'userId' : '52360a79-7f57-4a70-9590-c632196f8a56' };
+				var connection = $.hubConnection();
+				var hub = connection.createHubProxy('BoongalooGroupsActivityHub');
+				hub.on('GroupWasLeftByUser', function(leftGroupId) {
+					alert(leftGroupId);
+				});
+				connection.logging = true;
+   
+				connection.start()
+					.done(function () {
+						alert('Now connected, connection ID=' + connection.id);
+	
+					})
+					.fail(function (a)
+					{
+						alert('Could not connect'+ a );
+					});
+			});
+		</script>
+	</head>
+	<body>
+
+		<h1>My First App</h1>
+		<p>This is a test app. version 0.0.1</p>
+		<button id="connect-signalr">Connect to signalR</button>
+
+	</body>
+</html>
