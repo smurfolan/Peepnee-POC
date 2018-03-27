@@ -12,11 +12,16 @@
 		<script>
 			$(function ()
 			{
-				var connection = $.hubConnection('http://localhost:54036/signalr', {useDefaultPath: false});
+				var connection = $.hubConnection('http://likkleapi-staging.azurewebsites.net/signalr', {useDefaultPath: false});
 				var boongalooGroupsActivityHub = connection.createHubProxy('BoongalooGroupsActivityHub');
 				
 				boongalooGroupsActivityHub.on('GroupWasLeftByUser', function(leftGroupId) {
-					console.log('Id of the left group:' + leftGroupId);
+					var dt = new Date();
+					var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+					
+					var message = '[' + time + '] ' + 'Id of the left group:' + leftGroupId
+					console.log(message);
+					$("#signalr-message").text(message);
 				});
 				
 				connection.qs = { 'userId' : 'fb872173-930e-493d-a9f1-643d75f6be09' };
@@ -32,6 +37,7 @@
 		<h1>My First App</h1>
 		<p>This is a test app. version 0.0.1</p>
 		<button id="connect-signalr">Connect to signalR</button>
-
+		<h2>SignalR messages:</h2>
+		<div id="signalr-message"></div>
 	</body>
 </html>
