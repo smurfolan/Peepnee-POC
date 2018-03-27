@@ -1,20 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<widget xmlns   = "http://www.w3.org/ns/widgets"
-    xmlns:gap   = "http://phonegap.com/ns/1.0"
-    id          = "com.phonegap.example"
-    versionCode = "10"
-    version     = "0.0.2" >
-
-<!-- versionCode is optional and Android only -->
-
-  <name>Peepnee App</name>
-
-  <description>
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.phonegap.example" version="0.0.2" versionCode="10" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>Peepnee App</name>
+    <description>
       An example for phonegap build docs.
   </description>
-
-  <author href="https://build.phonegap.com" email="peepneeapp@gmail.com">
+    <author email="peepneeapp@gmail.com" href="https://build.phonegap.com">
       Peepnee App
   </author>
-  <icon src="icon.png"/>
+    <icon src="icon.png" />
+    <plugin name="cordova-plugin-local-notification" spec="~0.9.0-beta.2" />
 </widget>
