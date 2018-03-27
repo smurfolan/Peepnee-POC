@@ -32,9 +32,15 @@
 					console.log(message);
 					$("#signalr-message").text(message);
 					
+					<!--Obviously, local push notifications can be fired after a SignalR event. Even if in background-->
 					PushNotification('Group was left by user', message)
 				});
 				
+				boongalooGroupsActivityHub.on('GroupAroundMeWasRecreated', function(areaDtos, groupDto, isSubscribedByMe) {
+					<!--Obviously, complex objects are successfuly dispatched-->
+					alert(JSON.stringify(areaDtos));
+				});
+							
 				connection.qs = { 'userId' : 'fb872173-930e-493d-a9f1-643d75f6be09' };
 				
 				connection.start()
