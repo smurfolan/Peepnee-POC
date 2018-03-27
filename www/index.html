@@ -11,6 +11,14 @@
 
 		<script src="cordova.js"></script> 
 		<script>
+			function PushNotification(nTitle, nText){
+				cordova.plugins.notification.local.schedule({
+					title: nTitle,
+					text: nText,
+					foreground: true
+				});
+			}
+		
 			$(function ()
 			{
 				var connection = $.hubConnection('http://likkleapi-staging.azurewebsites.net/signalr', {useDefaultPath: false});
@@ -23,6 +31,8 @@
 					var message = '[' + time + '] ' + 'Id of the left group:' + leftGroupId
 					console.log(message);
 					$("#signalr-message").text(message);
+					
+					PushNotification('Group was left by user', message)
 				});
 				
 				connection.qs = { 'userId' : 'fb872173-930e-493d-a9f1-643d75f6be09' };
@@ -30,15 +40,7 @@
 				connection.start()
 				.done(function(){ console.log('Now connected, connection ID=' + connection.id); })
 				.fail(function(){ console.log('Could not connect'); });
-			});
-			
-			function PushNotification(){
-				cordova.plugins.notification.local.schedule({
-					title: 'My first notification',
-					text: 'Thats pretty easy...',
-					foreground: true
-				});
-			}
+			});		
 		</script>	
 	</head>
 	<body>
