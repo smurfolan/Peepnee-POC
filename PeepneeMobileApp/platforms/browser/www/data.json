@@ -1,0 +1,51 @@
+{   
+    "mailboxes": [
+        {   
+            "id": "1111",
+            "address": "Mladost 4, bl. 455, et. 3, ap. 6 ",
+            "messages": [
+                {
+                    "date": "Thu Apr 26 2018 19:37:14 GMT+0300"
+                },
+                {
+                    "date": "Mon Apr 23 2018 14:31:12 GMT+0300"
+                },
+                {
+                    "date": "Sun Apr 22 2018 10:15:11 GMT+0300"
+                }
+
+            ]
+        },
+        {   
+            "id": "2222",
+            "address": "Lyulin 10, bl. 322, et. 7, ap. 17 ",
+            "messages": [
+                {
+                    "date": "Mon Apr 23 2018 14:31:12 GMT+0300"
+                },
+                {
+                    "date": "Sun Apr 22 2018 10:15:11 GMT+0300"
+                }
+            ]
+        },
+        {
+            "id": "3333",
+            "address": "Lozenets, bl. 16, et. 4, ap. 25 ",
+            "messages": [
+                {
+                    "date": "Thu Apr 26 2018 19:37:14 GMT+0300"
+                }
+            ]
+        },
+        {   
+            "id": "4444",
+            "address": "Izgrev, bl. 9, et. 2, ap. 24 ",
+            "messages": null
+        },
+        {   
+            "id": "5555",
+            "address": "Studentski grad, bl. 51, et. 1, ap. 11 ",
+            "messages": null
+        }
+    ]
+}

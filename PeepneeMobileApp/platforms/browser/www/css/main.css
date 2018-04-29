@@ -1,0 +1,11 @@
+.user-icon {
+  text-align: center; }
+
+.mailboxes-container {
+  text-align: center; }
+  .mailboxes-container .count {
+    color: blue;
+    font-weight: bold; }
+
+#users-page, #mailboxes-page {
+  background: white; }

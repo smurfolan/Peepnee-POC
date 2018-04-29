@@ -10,6 +10,7 @@
     <!--<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />-->
 
     <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="css/main.css">
     <script type="text/javascript" src="lib/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="lib/jquery.mobile-1.4.5.min.js"></script>
 
@@ -24,29 +25,89 @@
 
 <body>
     <div class="app">
-      <div data-role="page" data-url="/" tabindex="0" class="ui-page ui-page-theme-a ui-page-active" style="min-height: 692px;">
+
+      <!-- Users page -->
+      <div data-role="page" id="users-page" data-url="/">
+
+          <div data-role="header" role="banner" data-theme="b">
+            <h1 class="ui-title" role="heading">Peepnee</h1>
+          </div><!-- /header -->
+  
+          <div data-role="content" class="ui-content" role="main">
+            <p style="text-align:center;">Please, select a user to continue with:</p>
+            <div data-role="popup" id="popupLogin" data-theme="a" class="ui-corner-all">
+                <form>
+                    <div style="padding:10px 20px;">
+                        <h3>Please verify it's you</h3>
+                        <input class="username-input" type="text" name="user" id="un" value="" placeholder="username" data-theme="a">
+                        <input class="password-input" type="password" name="pass" id="pw" value="" placeholder="password" data-theme="a">
+                        <a id="submit-link" onclick="verifyUser();" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-left " style="background: green;">Sign in</a>
+                    </div>
+                </form>
+            </div>
+            <ul id="users" data-inset="true" data-role="listview"></ul>
+          </div><!-- /content -->
+      </div>
+
+      <!-- Mailboxes page -->
+      <div data-role="page" id="mailboxes-page"  data-url="/mailboxes">
 
         <div data-role="header" role="banner" data-theme="b">
-          <h1 class="ui-title" role="heading" aria-level="1">Peepnee</h1>
+            <a href="#users-page" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-left " style="display:inline-block;">Back</a>
+            <h1 class="ui-title" role="heading">Peepnee</h1>
         </div><!-- /header -->
 
+        
         <div data-role="content" class="ui-content" role="main">
-          <p style="text-align:center;">Please, select a user to continue with:</p>
-          <ul id="users" data-inset="true" data-role="listview"></ul>
+            <div class="user-icon"> 
+                <img src="img/user-emailbox.png"></img>
+            </div>   
+            <p style="text-align:center;">Please, select a mailbox to continue with:</p>
+            <div class="mailboxes-container">
+                <span id="mailboxes-count"><span class="count"></span> Mailboxes</span>
+                <span id="messages-count"><span class="count"></span> Messages</span>
+                <br/>
+                <button class="ui-btn ui-btn-inline" style="background: lightgreen;">Add</button>
+                <button class="ui-btn ui-btn-inline" style="background: lightblue;">Rent</button>
+            </div>
+            
+            <ul id="mailboxes" data-inset="true" data-role="listview" data-count-theme="b"></ul>
+          </div><!-- /content -->
+      </div><!-- /page -->
+  
+      <!-- Messages -->
+      <div data-role="page" id="messages-page" data-url="/messages">
+      
+        <div data-role="header" role="banner" data-theme="b">
+            <a href="#mailboxes-page" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-left " style="display:inline-block;">Back</a>
+            <h1 class="ui-title" role="heading">Peepnee</h1>
+        </div><!-- /header -->
+      
+        <div data-role="content" class="ui-content" role="main">
+          <p style="text-align:center;">Mailbox</p>
+          <p id="mailbox-address" style="text-align:center;"></p>
+          <ul id="messages" data-inset="true" data-role="listview" data-count-theme="b"></ul>
         </div><!-- /content -->
-
-        <div data-role="footer" role="contentinfo" data-theme="b">
-          <h4 class="ui-title" role="heading" aria-level="1">Powered by jQuery Mobile</h4>
-        </div><!-- /footer -->
-      </div>
+      
+      </div><!-- /page -->
     </div>
+
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
-    <!--
+    
     <script type="text/javascript">
-        app.initialize();
+      //app.initialize();
+      var currentdate = new Date(); 
+      var datetime = "Now: " + currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear() + " @ "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+      console.log(currentdate);
+      console.log(datetime);
     </script>
-    -->
+   
 </body>
 
 </html>
