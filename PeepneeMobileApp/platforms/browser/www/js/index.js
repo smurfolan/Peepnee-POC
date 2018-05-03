@@ -127,3 +127,15 @@ $('#mailbox-behaviour-switch').change(function(event) {
   //console.log($(this).val());
   $("#default-time-container").toggle();
 });
+
+function showAcceptMessage() {
+  $("#accept-message-container").show().delay(3000).fadeOut();
+}
+
+function showResendMessage() {
+  $("#resend-message-container").show().delay(3000).fadeOut();
+}
+
+function showRejectMessage() {
+  $("#reject-message-container").show().delay(3000).fadeOut();
+}

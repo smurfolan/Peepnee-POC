@@ -12,3 +12,14 @@
 
 .ui-btn-icon-right:after {
   right: 0.8em !important; }
+
+#accept-message-container, #resend-message-container, #reject-message-container {
+  text-align: center;
+  display: none; }
+  #accept-message-container p, #resend-message-container p, #reject-message-container p {
+    width: 200px;
+    display: inline-block;
+    background: whitesmoke;
+    padding: 20px;
+    border: 1px solid #c8c8c8;
+    border-radius: 5px; }

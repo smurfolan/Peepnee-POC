@@ -34,7 +34,7 @@
                 <div data-role="popup" id="popupMenu" data-theme="a" class="ui-corner-all">
                     <form>
                         <div style="padding:10px 20px; width: 200px">
-                            <a href="/" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
+                            <a href="#mailboxes-page" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
                             <form>
                                     <h3><label for="mailbox-behaviour-switch" style="font-weight: bold;">The mailbox will open if you are unable to answer to the notification within 10 seconds</label></h3>
                                     <select name="mailbox-behaviour-switch" id="mailbox-behaviour-switch" data-role="flipswitch" data-mini="true">
@@ -46,7 +46,7 @@
                                 <label for="set-interval-input" style="font-weight: bold;">Change the default time for opening the mailbox</label>
                                 <input id="set-interval-input" type="text" value="" placeholder="Seconds" data-theme="a">
                             </div>
-                            <a href="/" onclick="clearInput();" id="set-default-behaviour" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-left " style="background: green; color:white;">Save</a>
+                            <a href="#mailboxes-page" onclick="clearInput();" id="set-default-behaviour" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-left " style="background: green; color:white;">Save</a>
                         </div>
                     </form>
                 </div>    
@@ -54,6 +54,18 @@
                 
             </h1>
         </div><!-- /header -->
+
+        <div id="accept-message-container">
+            <p>You've just approved the mailbox opening.</p>
+        </div>
+
+        <div id="resend-message-container">
+            <p>You've just asked for repeating the process.</p>
+        </div>
+
+        <div id="reject-message-container">
+            <p>You've just rejected the mailbox opening.</p>
+        </div>
 
         
         <div data-role="content" class="ui-content" role="main">
@@ -68,12 +80,12 @@
                 <div data-role="popup" id="popupAddMailbox" data-theme="a" class="ui-corner-all">             
                     <form>
                         <div style="padding:10px 20px;">
-                            <a href="/" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
+                            <a href="#mailboxes-page" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
                             <h3>Please fill the following</h3>
                             <input id="add-secret-code-input" type="text" value="" placeholder="Secret Code" data-theme="a">
                             <input id="add-secret-question-input" type="text" value="" placeholder="Secret Question" data-theme="a">
                             <input id="add-secret-answer-input" type="text" value="" placeholder="Secret Answer" data-theme="a">
-                            <a href="/" onclick="clearInput();" id="add-mailbox-form" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-left " style="background: green; color:white;">Add mailbox</a>
+                            <a href="#mailboxes-page" onclick="clearInput();" id="add-mailbox-form" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-left " style="background: green; color:white;">Add mailbox</a>
                         </div>
                     </form>
                 </div>
@@ -82,10 +94,10 @@
                 <div data-role="popup" id="popupRentMailbox" data-theme="a" class="ui-corner-all">
                     <form>
                         <div style="padding:10px 20px;">
-                            <a href="/" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
+                            <a href="#mailboxes-page" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
                             <h3>Please fill the secret code</h3>
                             <input id="rent-secret-code-input" type="text" value="" placeholder="Secret Code" data-theme="a">
-                            <a href="/" onclick="clearInput();" id="add-mailbox-form" class="ui-btn ui-shadow ui-corner-all ui-icon-action ui-btn-icon-left " style="background: blue; color:white;">Rent mailbox</a>
+                            <a href="#mailboxes-page" onclick="clearInput();" id="add-mailbox-form" class="ui-btn ui-shadow ui-corner-all ui-icon-action ui-btn-icon-left " style="background: blue; color:white;">Rent mailbox</a>
                         </div>
                     </form>
                 </div>
@@ -137,6 +149,27 @@
             <p id="message-received-on" style="text-align:center;"></p>
             <div id="message-info" style="text-align:center;"></div>
         </div><!-- /content -->
+      </div><!-- /page -->
+
+      <!-- Notification page -->
+      <div data-role="page" id="notification-page" data-url="/notification">
+        <a id="notification-page-link" href="#notification-page" style="display: none"></a>
+
+        <div data-role="header" role="banner" data-theme="b">
+            <h1 class="ui-title" role="heading">Peepnee</h1>
+        </div><!-- /header -->
+
+        <div data-role="content" class="ui-content" role="main">
+            <p style="text-align:center;">Pending approval for opening the mailbox</p>
+            <div id="message-image-container" style="text-align:center;">
+                <img src="http://www.mailservices.emory.edu/images/OXFORD%20CAMPUS%20MAIL.png" style="width: 320px"/>
+                <br/>
+                <a href="#mailboxes-page" onclick="showAcceptMessage();" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" style="background: green; color:white;">Accept</a>
+                <a href="#mailboxes-page" onclick="showResendMessage();" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-recycle ui-btn-icon-left ui-btn-a" style="background: blue; color:white;">Send again</a>
+                <a href="#mailboxes-page" onclick="showRejectMessage();" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a" style="background: red; color:white;">Ignore</a>
+
+            </div>
+        </div><!-- /content -->
 
       </div><!-- /page -->
 
@@ -144,13 +177,21 @@
 
     <script type="text/javascript" src="cordova.js"></script>
     <script>
-        function PushNotification(nTitle, nText){
+        //document.getElementById('notification-page-link').click(); 
+        //function PushNotification(nTitle, nText){
+        function PushNotification(){       
             cordova.plugins.notification.local.schedule({
-                title: nTitle,
-                text: nText,
+                title: "You are receiving a mail",
+                text: "Do you want to open the mailbox?",
                 foreground: true
             });
-        }	
+
+            cordova.plugins.notification.local.on("click", function () {
+                //alert("Notification");
+                document.getElementById('notification-page-link').click();                
+            });
+        }
+
     </script>	
     <script type="text/javascript" src="js/index.js"></script>   
 </body>

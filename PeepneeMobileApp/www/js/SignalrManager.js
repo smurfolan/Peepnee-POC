@@ -16,7 +16,8 @@ class SignalrManager {
     console.log(message);
 
     //<!-- Obviously, local push notifications can be fired after a SignalR event. Even if in background -->
-    PushNotification('Group was left by user', message);
+    //PushNotification('Group was left by user', message);
+    PushNotification();
   }
 
   Initialize(){
