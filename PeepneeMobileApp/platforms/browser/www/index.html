@@ -26,35 +26,33 @@
 <body>
     <div class="app">
 
-      <!-- Users page -->
-      <div data-role="page" id="users-page" data-url="/">
-
-          <div data-role="header" role="banner" data-theme="b">
-            <h1 class="ui-title" role="heading">Peepnee</h1>
-          </div><!-- /header -->
-  
-          <div data-role="content" class="ui-content" role="main">
-            <p style="text-align:center;">Please, select a user to continue with:</p>
-            <div data-role="popup" id="popupLogin" data-theme="a" class="ui-corner-all">
-                <form>
-                    <div style="padding:10px 20px;">
-                        <h3>Please verify it's you</h3>
-                        <input class="username-input" type="text" name="user" id="un" value="" placeholder="username" data-theme="a">
-                        <input class="password-input" type="password" name="pass" id="pw" value="" placeholder="password" data-theme="a">
-                        <a id="submit-link" onclick="verifyUser();" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-left " style="background: green;">Sign in</a>
-                    </div>
-                </form>
-            </div>
-            <ul id="users" data-inset="true" data-role="listview"></ul>
-          </div><!-- /content -->
-      </div>
-
       <!-- Mailboxes page -->
-      <div data-role="page" id="mailboxes-page"  data-url="/mailboxes">
+      <div data-role="page" id="mailboxes-page"  data-url="/">
 
         <div data-role="header" role="banner" data-theme="b">
-            <a href="#users-page" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-left " style="display:inline-block;">Back</a>
-            <h1 class="ui-title" role="heading">Peepnee</h1>
+            <a href="#popupMenu" data-rel="popup" data-transition="slideup" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-gear ui-btn-icon-right" style="height: 16px;"></a>
+                <div data-role="popup" id="popupMenu" data-theme="a" class="ui-corner-all">
+                    <form>
+                        <div style="padding:10px 20px; width: 200px">
+                            <a href="/" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
+                            <form>
+                                    <h3><label for="mailbox-behaviour-switch" style="font-weight: bold;">The mailbox will open if you are unable to answer to the notification within 10 seconds</label></h3>
+                                    <select name="mailbox-behaviour-switch" id="mailbox-behaviour-switch" data-role="flipswitch" data-mini="true">
+                                        <option value="off">Off</option>
+                                        <option selected="" value="on">On</option>
+                                    </select>
+                            </form>
+                            <div id="default-time-container" style="margin-top: 15px">
+                                <label for="set-interval-input" style="font-weight: bold;">Change the default time for opening the mailbox</label>
+                                <input id="set-interval-input" type="text" value="" placeholder="Seconds" data-theme="a">
+                            </div>
+                            <a href="/" onclick="clearInput();" id="set-default-behaviour" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-left " style="background: green; color:white;">Save</a>
+                        </div>
+                    </form>
+                </div>    
+            <h1 class="ui-title" role="heading">Peepnee
+                
+            </h1>
         </div><!-- /header -->
 
         
@@ -62,13 +60,37 @@
             <div class="user-icon"> 
                 <img src="img/user-emailbox.png"></img>
             </div>   
-            <p style="text-align:center;">Please, select a mailbox to continue with:</p>
             <div class="mailboxes-container">
                 <span id="mailboxes-count"><span class="count"></span> Mailboxes</span>
                 <span id="messages-count"><span class="count"></span> Messages</span>
                 <br/>
-                <button class="ui-btn ui-btn-inline" style="background: lightgreen;">Add</button>
-                <button class="ui-btn ui-btn-inline" style="background: lightblue;">Rent</button>
+                <a href="#popupAddMailbox" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop" style="background: green; color:white;">Add</a>
+                <div data-role="popup" id="popupAddMailbox" data-theme="a" class="ui-corner-all">             
+                    <form>
+                        <div style="padding:10px 20px;">
+                            <a href="/" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
+                            <h3>Please fill the following</h3>
+                            <input id="add-secret-code-input" type="text" value="" placeholder="Secret Code" data-theme="a">
+                            <input id="add-secret-question-input" type="text" value="" placeholder="Secret Question" data-theme="a">
+                            <input id="add-secret-answer-input" type="text" value="" placeholder="Secret Answer" data-theme="a">
+                            <a href="/" onclick="clearInput();" id="add-mailbox-form" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-left " style="background: green; color:white;">Add mailbox</a>
+                        </div>
+                    </form>
+                </div>
+
+                <a href="#popupRentMailbox" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-action ui-btn-icon-left ui-btn-a" data-transition="pop" style="background: blue; color:white;">Rent</a>
+                <div data-role="popup" id="popupRentMailbox" data-theme="a" class="ui-corner-all">
+                    <form>
+                        <div style="padding:10px 20px;">
+                            <a href="/" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
+                            <h3>Please fill the secret code</h3>
+                            <input id="rent-secret-code-input" type="text" value="" placeholder="Secret Code" data-theme="a">
+                            <a href="/" onclick="clearInput();" id="add-mailbox-form" class="ui-btn ui-shadow ui-corner-all ui-icon-action ui-btn-icon-left " style="background: blue; color:white;">Rent mailbox</a>
+                        </div>
+                    </form>
+                </div>
+
+                
             </div>
             
             <ul id="mailboxes" data-inset="true" data-role="listview" data-count-theme="b"></ul>
@@ -80,34 +102,57 @@
       
         <div data-role="header" role="banner" data-theme="b">
             <a href="#mailboxes-page" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-left " style="display:inline-block;">Back</a>
+            <a href="#popupRemoveMailbox" id="remove-mailbox-btn" data-rel="popup" data-position-to="window" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a" data-transition="pop" style="background: red; color:white;">Remove</a>
             <h1 class="ui-title" role="heading">Peepnee</h1>
         </div><!-- /header -->
       
         <div data-role="content" class="ui-content" role="main">
           <p style="text-align:center;">Mailbox</p>
           <p id="mailbox-address" style="text-align:center;"></p>
+          
+          <div data-role="popup" id="popupRemoveMailbox" data-theme="a" class="ui-corner-all">
+            <form>
+                <div style="padding:10px 20px;">
+                    <a href="#messages-page" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
+                    <h3>Please confirm removing the mailbox</h3>
+                    <a href="#mailbox-address" onclick="clearInput();" id="add-mailbox-form" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-left " style="background: red; color:white;">Remove mailbox</a>
+                </div>
+            </form>
+          </div>
           <ul id="messages" data-inset="true" data-role="listview" data-count-theme="b"></ul>
         </div><!-- /content -->
-      
       </div><!-- /page -->
+
+      <!-- Message details -->
+      <div data-role="page" id="message-details" data-url="/details">
+
+        <div data-role="header" role="banner" data-theme="b">
+            <a href="#messages-page" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-left" >Back</a>
+            <a href="#mailboxes-page" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left" >Home</a>
+            <h1 class="ui-title" role="heading">Peepnee</h1>
+        </div><!-- /header -->
+
+        <div data-role="content" class="ui-content" role="main">
+            <p style="text-align:center;">Message received on</p>
+            <p id="message-received-on" style="text-align:center;"></p>
+            <div id="message-info" style="text-align:center;"></div>
+        </div><!-- /content -->
+
+      </div><!-- /page -->
+
     </div>
 
     <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
-    
-    <script type="text/javascript">
-      //app.initialize();
-      var currentdate = new Date(); 
-      var datetime = "Now: " + currentdate.getDate() + "/"
-                + (currentdate.getMonth()+1)  + "/" 
-                + currentdate.getFullYear() + " @ "  
-                + currentdate.getHours() + ":"  
-                + currentdate.getMinutes() + ":" 
-                + currentdate.getSeconds();
-      console.log(currentdate);
-      console.log(datetime);
-    </script>
-   
+    <script>
+        function PushNotification(nTitle, nText){
+            cordova.plugins.notification.local.schedule({
+                title: nTitle,
+                text: nText,
+                foreground: true
+            });
+        }	
+    </script>	
+    <script type="text/javascript" src="js/index.js"></script>   
 </body>
 
 </html>

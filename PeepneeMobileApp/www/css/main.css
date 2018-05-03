@@ -1,3 +1,6 @@
+#users-page, #mailboxes-page {
+  background: white; }
+
 .user-icon {
   text-align: center; }
 
@@ -7,5 +10,5 @@
     color: blue;
     font-weight: bold; }
 
-#users-page, #mailboxes-page {
-  background: white; }
+.ui-btn-icon-right:after {
+  right: 0.8em !important; }

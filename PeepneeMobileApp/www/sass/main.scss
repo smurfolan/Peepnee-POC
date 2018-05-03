@@ -1,5 +1,24 @@
-@import "./components/UserMailbox.scss";
+//@import "./components/UserMailbox.scss";
 
 #users-page, #mailboxes-page {
     background: white;
+}
+
+.user-icon {
+    text-align: center;
+}
+
+.mailboxes-container {
+    text-align: center;
+
+    .count {
+        color: blue;
+        font-weight: bold;
+    }
+}
+
+.ui-btn-icon-right {
+    &:after {
+        right: 0.8em !important;
+    }
 }

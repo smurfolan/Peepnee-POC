@@ -12,11 +12,11 @@ class SignalrManager {
     var dt = new Date();
     var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
 
-    var message = '[' + time + '] ' + 'Id of the left group:' + leftGroupId
+    var message = '[' + time + '] ' + 'Id of the left group:' + leftGroupId;
     console.log(message);
 
     //<!-- Obviously, local push notifications can be fired after a SignalR event. Even if in background -->
-    PushNotification('Group was left by user', message)
+    PushNotification('Group was left by user', message);
   }
 
   Initialize(){
