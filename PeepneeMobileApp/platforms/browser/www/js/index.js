@@ -139,3 +139,16 @@ function showResendMessage() {
 function showRejectMessage() {
   $("#reject-message-container").show().delay(3000).fadeOut();
 }
+
+function setTimer() {
+  var count = 10;
+  setInterval(function() {
+    if(count == 0) {
+      document.getElementById("timer").innerHTML = "EXPIRED";
+      return;
+    } else {
+      document.getElementById("timer").innerHTML = count + " seconds";
+    }
+    count--;
+  }, 1000);
+}

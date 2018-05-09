@@ -160,7 +160,8 @@
         </div><!-- /header -->
 
         <div data-role="content" class="ui-content" role="main">
-            <p style="text-align:center;">Pending approval for opening the mailbox</p>
+            <p style="text-align:center;">Pending approval for opening the mailbox:</p>
+            <div id=timer stile="text-align:center;"></div>
             <div id="message-image-container" style="text-align:center;">
                 <img src="http://www.mailservices.emory.edu/images/OXFORD%20CAMPUS%20MAIL.png" style="width: 320px"/>
                 <br/>
@@ -179,7 +180,8 @@
     <script>
         //document.getElementById('notification-page-link').click(); 
         //function PushNotification(nTitle, nText){
-        function PushNotification(){       
+        function PushNotification(){  
+            var sendTime = new Date().getTime();     
             cordova.plugins.notification.local.schedule({
                 title: "You are receiving a mail",
                 text: "Do you want to open the mailbox?",
@@ -188,7 +190,14 @@
 
             cordova.plugins.notification.local.on("click", function () {
                 //alert("Notification");
-                document.getElementById('notification-page-link').click();                
+                var now = new Date().getTime();
+                if(now - sendTime <= 10000) {
+                    document.getElementById('notification-page-link').click();
+                    setTimer();
+                } else {
+                    document.getElementById('mailboxes-page').click();
+                }
+                //document.getElementById('notification-page-link').click();                
             });
         }
 

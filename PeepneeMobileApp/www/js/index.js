@@ -139,3 +139,33 @@ function showResendMessage() {
 function showRejectMessage() {
   $("#reject-message-container").show().delay(3000).fadeOut();
 }
+
+function setTimer() {
+  var count = 10;
+  var setTimer = setInterval(function() {
+    $("#timer").text(count + " seconds"); // case 1.1 - in this interval the user should answer
+
+    if(count === 0) {
+      $("#timer").text("EXPIRED");
+      timeExpired(true); // case 1.2
+      clearInterval(setTimer);
+    }
+    count--;
+  }, 1000);
+}
+
+function timeExpired(isTimeExpired) {
+  if(isTimeExpired) {
+    $("#timer").text("EXPIRED");
+    $("#accept-message").hide();
+    $("#send-again").hide();
+    $("#ignore-message").hide();
+    $("#homepage-link").show();
+  } else {
+    $("#timer").text("");
+    $("#accept-message").show();
+    $("#send-again").show();
+    $("#ignore-message").show();
+    $("#homepage-link").hide();
+  }
+}
