@@ -1,8 +1,10 @@
 document.addEventListener('deviceready', this.onDeviceReady, false);
 
+var setTimer;
+
 function onDeviceReady(){
-    userSelected('5b8e69b6-fc13-494d-9228-4215de85254f');
-    getMailboxes();
+  invokeSignalrManager();
+  getMailboxes();
 }
 
 // Mailboxes page
@@ -108,11 +110,8 @@ function showMessageDetails(mailboxId, messageId) {
   });
 }
 
-function userSelected(userId){
-  // 1. Maker REST call to mark this user as 'taken' and return his boxes
-  // 2. Navigate to another page dedicated to the mailboxes
- // alert('You selected:' + userId);
-  var signalRManager = new SignalrManager(userId);
+function invokeSignalrManager(){
+  var signalRManager = new SignalrManager();
 }
 
 function clearInput() {
@@ -128,27 +127,48 @@ $('#mailbox-behaviour-switch').change(function(event) {
   $("#default-time-container").toggle();
 });
 
-function showAcceptMessage() {
-  $("#accept-message-container").show().delay(3000).fadeOut();
+function acceptMessageBtnClicked() {
+  $("#accept-message-container").show().delay(3000).fadeOut(); //show accept message
+  clearInterval(setTimer); //stop timer
+  timeExpired(true, "the mailbox was opened");
 }
 
-function showResendMessage() {
+function sendAgainMessageBtnClicked() {
   $("#resend-message-container").show().delay(3000).fadeOut();
+  clearInterval(setTimer); //stop timer
+  timeExpired(true, "you should receive the notification again");
 }
 
-function showRejectMessage() {
+function ignoreMessageBtnClicked() {
   $("#reject-message-container").show().delay(3000).fadeOut();
+  clearInterval(setTimer); //stop timer
+  timeExpired(true, "the mailbox was not opened");
 }
 
-function setTimer() {
+function startTimer() {
   var count = 10;
-  setInterval(function() {
-    if(count == 0) {
-      document.getElementById("timer").innerHTML = "EXPIRED";
-      return;
-    } else {
-      document.getElementById("timer").innerHTML = count + " seconds";
+  setTimer = setInterval(function() {
+    $("#timer").text(count + " seconds"); // case 1.1 - in this interval the user should answer
+
+    if(count === 0) {
+      timeExpired(true, "the time expired"); // case 1.2
+      clearInterval(setTimer);
     }
     count--;
   }, 1000);
+}
+
+function timeExpired(isTimeExpired, displayMessage) {
+  $("#timer").text(displayMessage);
+  if(isTimeExpired) {
+    $("#accept-message").hide();
+    $("#send-again").hide();
+    $("#ignore-message").hide();
+    $("#homepage-link").show();
+  } else {
+    $("#accept-message").show();
+    $("#send-again").show();
+    $("#ignore-message").show();
+    $("#homepage-link").hide();
+  }
 }

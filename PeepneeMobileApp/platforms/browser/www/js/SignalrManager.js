@@ -1,34 +1,39 @@
 class SignalrManager {
-  constructor(userIdentifier) {
-    this.userId = userIdentifier;
+  constructor() {
     this.hubUrlAddress = 'http://likkleapi-staging.azurewebsites.net/signalr';
-    this.hubName = 'BoongalooGroupsActivityHub';
+    this.hubName = 'PeepneeHub';
 
     this.Initialize();
   }
 
-  // Event handlers
-  GroupWasLeftByUser(leftGroupId){
-    var dt = new Date();
-    var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-
-    var message = '[' + time + '] ' + 'Id of the left group:' + leftGroupId;
-    console.log(message);
-
-    //<!-- Obviously, local push notifications can be fired after a SignalR event. Even if in background -->
-    //PushNotification('Group was left by user', message);
-    PushNotification();
+  newMailRequest(takenPictureUrl, ocrParsedText) {
+    //alert(takenPictureUrl + "\n" + ocrParsedText);
+    PushNotification(takenPictureUrl, ocrParsedText);
   }
 
   Initialize(){
     var connection = $.hubConnection(this.hubUrlAddress, {useDefaultPath: false});
-    this.boongalooGroupsActivityHub = connection.createHubProxy(this.hubName);
+    var peepneeHub = connection.createHubProxy(this.hubName);
 
-    this.boongalooGroupsActivityHub.on('GroupWasLeftByUser', this.GroupWasLeftByUser);
+    peepneeHub.on('newMailRequest', this.newMailRequest);
 
-    connection.qs = { 'userId' : this.userId };
     connection.start()
-				.done(function(){ console.log('Now connected, connection ID=' + connection.id); })
-				.fail(function(){ console.log('Could not connect'); });
+				.done(function(){ 
+          console.log('Now connected, connection ID=' + connection.id);
+
+          $("#accept-message").click(function() {
+            peepneeHub.invoke('mailRequestAccepted');
+          });
+
+          $("#send-again").click(function() {
+            peepneeHub.invoke('repeatMailRequest');
+          });
+
+          $("#ignore-message").click(function() {
+            peepneeHub.invoke('mailRequestDeclined');
+          });
+           
+        })
+        .fail(function(){ console.log('Could not connect'); });    
   }
 }

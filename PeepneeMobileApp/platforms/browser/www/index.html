@@ -20,7 +20,7 @@
 
     <script type="text/javascript" src="js/SignalrManager.js"></script>
 
-    <title>Hello World</title>
+    <title>Peepnee</title>
 </head>
 
 <body>
@@ -161,13 +161,15 @@
 
         <div data-role="content" class="ui-content" role="main">
             <p style="text-align:center;">Pending approval for opening the mailbox:</p>
-            <div id=timer stile="text-align:center;"></div>
+            <div id=timer style="font-weight: bold; text-align: center;"></div>
             <div id="message-image-container" style="text-align:center;">
-                <img src="http://www.mailservices.emory.edu/images/OXFORD%20CAMPUS%20MAIL.png" style="width: 320px"/>
+                <img id="new-mail-request-image" src="" style="width: 320px"/>
                 <br/>
-                <a href="#mailboxes-page" onclick="showAcceptMessage();" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" style="background: green; color:white;">Accept</a>
-                <a href="#mailboxes-page" onclick="showResendMessage();" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-recycle ui-btn-icon-left ui-btn-a" style="background: blue; color:white;">Send again</a>
-                <a href="#mailboxes-page" onclick="showRejectMessage();" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a" style="background: red; color:white;">Ignore</a>
+                <p id="new-mail-request-text" style="text-align: center;"></p>
+                <a href="#mailboxes-page" id="accept-message" onclick="acceptMessageBtnClicked();" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" style="background: green; color:white;">Accept</a>
+                <a href="#mailboxes-page" id="send-again" onclick="sendAgainMessageBtnClicked();" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-recycle ui-btn-icon-left ui-btn-a" style="background: blue; color:white;">Send again</a>
+                <a href="#mailboxes-page" id="ignore-message" onclick="ignoreMessageBtnClicked();" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a" style="background: red; color:white;">Ignore</a>
+                <a href="#mailboxes-page" id="homepage-link" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-home ui-btn-icon-left ui-btn-a" style="background: blue; color:white;">Homepage</a>
 
             </div>
         </div><!-- /content -->
@@ -179,9 +181,10 @@
     <script type="text/javascript" src="cordova.js"></script>
     <script>
         //document.getElementById('notification-page-link').click(); 
-        //function PushNotification(nTitle, nText){
-        function PushNotification(){  
-            var sendTime = new Date().getTime();     
+        function PushNotification(takenPictureUrl, ocrParsedText){
+            $("#new-mail-request-image").attr("src", takenPictureUrl);
+            $("#new-mail-request-text").text(ocrParsedText);
+            var sendTime = new Date().getTime();   
             cordova.plugins.notification.local.schedule({
                 title: "You are receiving a mail",
                 text: "Do you want to open the mailbox?",
@@ -191,13 +194,21 @@
             cordova.plugins.notification.local.on("click", function () {
                 //alert("Notification");
                 var now = new Date().getTime();
-                if(now - sendTime <= 10000) {
+                /* There are some cases, which we track:
+                    1. if the user clicks the notification on time: the user see notification page with timer and three action buttons
+                        1.1 if the user answers on time: the user is redirect to homepage with confirmation message for the action which is taken
+                        1.2 if the user doesn't answer on time: after the time expired the action buttons are replaced with homepage button
+                    2. if the user doesn't click the notification on time: time was expired and the user see notification page with homepage button   
+                */
+
+                if(now - sendTime <= 15000) {
                     document.getElementById('notification-page-link').click();
-                    setTimer();
+                    timeExpired(false, ""); // case 1
+                    startTimer();
                 } else {
-                    document.getElementById('mailboxes-page').click();
-                }
-                //document.getElementById('notification-page-link').click();                
+                    document.getElementById('notification-page-link').click();
+                    timeExpired(true, "the time expired"); // case 2
+                }               
             });
         }
 
