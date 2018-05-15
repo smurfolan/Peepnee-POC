@@ -20,6 +20,22 @@
 
     <script type="text/javascript" src="js/SignalrManager.js"></script>
 
+    <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDSIjl3Am48o1JVtRglV0GFKHcmPplWzZM",
+            authDomain: "peepnee-13be3.firebaseapp.com",
+            databaseURL: "https://peepnee-13be3.firebaseio.com",
+            projectId: "peepnee-13be3",
+            storageBucket: "",
+            messagingSenderId: "360840998825"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <!-- execute the scrript below once to import data in firebase -->
+    <!-- <script type="text/javascript" src="js/dataImport.js"></script> -->
+
     <title>Peepnee</title>
 </head>
 
@@ -29,30 +45,8 @@
       <!-- Mailboxes page -->
       <div data-role="page" id="mailboxes-page"  data-url="/">
 
-        <div data-role="header" role="banner" data-theme="b">
-            <a href="#popupMenu" data-rel="popup" data-transition="slideup" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-gear ui-btn-icon-right" style="height: 16px;"></a>
-                <div data-role="popup" id="popupMenu" data-theme="a" class="ui-corner-all">
-                    <form>
-                        <div style="padding:10px 20px; width: 200px">
-                            <a href="#mailboxes-page" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
-                            <form>
-                                    <h3><label for="mailbox-behaviour-switch" style="font-weight: bold;">The mailbox will open if you are unable to answer to the notification within 10 seconds</label></h3>
-                                    <select name="mailbox-behaviour-switch" id="mailbox-behaviour-switch" data-role="flipswitch" data-mini="true">
-                                        <option value="off">Off</option>
-                                        <option selected="" value="on">On</option>
-                                    </select>
-                            </form>
-                            <div id="default-time-container" style="margin-top: 15px">
-                                <label for="set-interval-input" style="font-weight: bold;">Change the default time for opening the mailbox</label>
-                                <input id="set-interval-input" type="text" value="" placeholder="Seconds" data-theme="a">
-                            </div>
-                            <a href="#mailboxes-page" onclick="clearInput();" id="set-default-behaviour" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-left " style="background: green; color:white;">Save</a>
-                        </div>
-                    </form>
-                </div>    
-            <h1 class="ui-title" role="heading">Peepnee
-                
-            </h1>
+        <div data-role="header" role="banner" data-theme="b">   
+            <h1 class="ui-title" role="heading">Peepnee</h1>
         </div><!-- /header -->
 
         <div id="accept-message-container">
@@ -97,7 +91,7 @@
                             <a href="#mailboxes-page" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
                             <h3>Please fill the secret code</h3>
                             <input id="rent-secret-code-input" type="text" value="" placeholder="Secret Code" data-theme="a">
-                            <a href="#mailboxes-page" onclick="clearInput();" id="add-mailbox-form" class="ui-btn ui-shadow ui-corner-all ui-icon-action ui-btn-icon-left " style="background: blue; color:white;">Rent mailbox</a>
+                            <a href="#mailboxes-page" onclick="clearInput();" id="rent-mailbox-form" class="ui-btn ui-shadow ui-corner-all ui-icon-action ui-btn-icon-left " style="background: blue; color:white;">Rent mailbox</a>
                         </div>
                     </form>
                 </div>
@@ -114,7 +108,26 @@
       
         <div data-role="header" role="banner" data-theme="b">
             <a href="#mailboxes-page" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-left " style="display:inline-block;">Back</a>
-            <a href="#popupRemoveMailbox" id="remove-mailbox-btn" data-rel="popup" data-position-to="window" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a" data-transition="pop" style="background: red; color:white;">Remove</a>
+            <a href="#popupMenu" data-rel="popup" data-transition="slideup" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-gear ui-btn-icon-right" style="height: 16px;"></a>
+            <div data-role="popup" id="popupMenu" data-theme="a" class="ui-corner-all">
+                <form>
+                    <div style="padding:10px 20px; width: 200px">
+                        <a href="#messages-page" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
+                        <form>
+                                <h3><label for="mailbox-behaviour-switch" style="font-weight: bold;">The mailbox will open if you are unable to answer to the notification within 10 seconds</label></h3>
+                                <select name="mailbox-behaviour-switch" id="mailbox-behaviour-switch" data-role="flipswitch" data-mini="true">
+                                    <option value="off">No</option>
+                                    <option selected="" value="on">Yes</option>
+                                </select>
+                        </form>
+                        <div id="default-time-container" style="margin-top: 15px">
+                            <label for="set-interval-input" style="font-weight: bold;">Change the default time for opening the mailbox</label>
+                            <input id="set-interval-input" type="text" value="" placeholder="Seconds" data-theme="a">
+                        </div>
+                        <a href="#messages-page" onclick="clearInput();" id="set-default-behaviour" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-left " style="background: green; color:white;">Save</a>
+                    </div>
+                </form>
+            </div> 
             <h1 class="ui-title" role="heading">Peepnee</h1>
         </div><!-- /header -->
       
@@ -122,15 +135,7 @@
           <p style="text-align:center;">Mailbox</p>
           <p id="mailbox-address" style="text-align:center;"></p>
           
-          <div data-role="popup" id="popupRemoveMailbox" data-theme="a" class="ui-corner-all">
-            <form>
-                <div style="padding:10px 20px;">
-                    <a href="#messages-page" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
-                    <h3>Please confirm removing the mailbox</h3>
-                    <a href="#mailbox-address" onclick="clearInput();" id="add-mailbox-form" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-left " style="background: red; color:white;">Remove mailbox</a>
-                </div>
-            </form>
-          </div>
+         
           <ul id="messages" data-inset="true" data-role="listview" data-count-theme="b"></ul>
         </div><!-- /content -->
       </div><!-- /page -->
@@ -140,12 +145,21 @@
 
         <div data-role="header" role="banner" data-theme="b">
             <a href="#messages-page" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-left" >Back</a>
-            <a href="#mailboxes-page" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left" >Home</a>
+            <a href="#popupRemoveMailbox" id="remove-mailbox-btn" data-rel="popup" data-position-to="window" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a" data-transition="pop" style="background: red; color:white;">Remove</a>
             <h1 class="ui-title" role="heading">Peepnee</h1>
         </div><!-- /header -->
 
         <div data-role="content" class="ui-content" role="main">
-            <p style="text-align:center;">Message received on</p>
+            <p id="message-received-on-title" style="text-align:center;">Message received on</p>
+            <div data-role="popup" id="popupRemoveMailbox" data-theme="a" class="ui-corner-all">
+                <form>
+                    <div style="padding:10px 20px;">
+                        <a href="#messages-page" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
+                        <h3>Please confirm removing the mailbox</h3>
+                        <a href="#message-received-on" onclick="removeMail();" id="remove-mailbox-form" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-left " style="background: red; color:white;">Remove mailbox</a>
+                    </div>
+                </form>
+            </div>
             <p id="message-received-on" style="text-align:center;"></p>
             <div id="message-info" style="text-align:center;"></div>
         </div><!-- /content -->
@@ -166,9 +180,9 @@
                 <img id="new-mail-request-image" src="" style="width: 320px"/>
                 <br/>
                 <p id="new-mail-request-text" style="text-align: center;"></p>
-                <a href="#mailboxes-page" id="accept-message" onclick="acceptMessageBtnClicked();" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" style="background: green; color:white;">Accept</a>
-                <a href="#mailboxes-page" id="send-again" onclick="sendAgainMessageBtnClicked();" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-recycle ui-btn-icon-left ui-btn-a" style="background: blue; color:white;">Send again</a>
-                <a href="#mailboxes-page" id="ignore-message" onclick="ignoreMessageBtnClicked();" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a" style="background: red; color:white;">Ignore</a>
+                <a onclick="acceptMessageBtnClicked();" href="#mailboxes-page" id="accept-message"  class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" style="background: green; color:white;">Accept</a>
+                <a onclick="sendAgainMessageBtnClicked();" href="#mailboxes-page" id="send-again" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-recycle ui-btn-icon-left ui-btn-a" style="background: blue; color:white;">Send again</a>
+                <a onclick="ignoreMessageBtnClicked();" href="#mailboxes-page" id="ignore-message" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a" style="background: red; color:white;">Ignore</a>
                 <a href="#mailboxes-page" id="homepage-link" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-home ui-btn-icon-left ui-btn-a" style="background: blue; color:white;">Homepage</a>
 
             </div>
@@ -200,13 +214,12 @@
                         1.2 if the user doesn't answer on time: after the time expired the action buttons are replaced with homepage button
                     2. if the user doesn't click the notification on time: time was expired and the user see notification page with homepage button   
                 */
-
+                
+                document.getElementById('notification-page-link').click();
                 if(now - sendTime <= 15000) {
-                    document.getElementById('notification-page-link').click();
                     timeExpired(false, ""); // case 1
                     startTimer();
                 } else {
-                    document.getElementById('notification-page-link').click();
                     timeExpired(true, "the time expired"); // case 2
                 }               
             });

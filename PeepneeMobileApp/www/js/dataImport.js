@@ -1,5 +1,4 @@
-{   
-    "mailboxes": [
+var dataImportToDb = [
         {   
             "id": "1111",
             "address": "Mladost 4, bl. 455, et. 3, ap. 6 ",
@@ -74,5 +73,12 @@
             "secretAnswer": "Nina Dobrev",
             "messages": null
         }
-    ]
+    ];
+
+//console.log(firebase);
+var database = firebase.database();
+var ref = database.ref('mailboxes');
+for(var i = 0; i < dataImportToDb.length; i++) {
+    ref.push(dataImportToDb[i]);
 }
+//ref.push(dataImportToDb);

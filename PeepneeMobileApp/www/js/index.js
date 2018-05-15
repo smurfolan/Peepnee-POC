@@ -9,80 +9,91 @@ function onDeviceReady(){
 
 // Mailboxes page
 function getMailboxes() {
-  $.getJSON( "data.json", function( data ) {
-    //console.log(data);
-    let mailboxesOutput = '';
-    let mailboxesCount = 0;
-    let messagesCount = 0;
-    $.each( data.mailboxes, function( index, mailbox ) {
-      mailboxesCount++;
-      if(mailbox.messages) {
-        messagesCount += mailbox.messages.length;
+  var database = firebase.database();
+  var ref = database.ref('mailboxes');
+  ref.on('value', function(data) {
+    //console.log(data.val());
+    var mailboxes = data.val();
+    var keys = Object.keys(mailboxes);
+
+    var mailboxesCount = keys.length;
+    var messagesCount = 0;
+
+    var mailboxesOutput = '';
+    for(var i = 0; i < keys.length; i++) {
+      var key = keys[i];
+      if(mailboxes[key].messages) {
+        messagesCount += Object.keys(mailboxes[key].messages).length;
+
         mailboxesOutput += `
         <li data-icon="info">
-          <a onclick="showMailboxInformation('${mailbox.id}')" href="#messages-page">
-            ${mailbox.address}
-            <span class="ui-li-count">${mailbox.messages.length}</span>
+          <a onclick="showMailboxInformation('${key}')" href="#messages-page">
+            ${mailboxes[key].address}
+            <span class="ui-li-count">${Object.keys(mailboxes[key].messages).length}</span>
           </a>
         </li>
       `;
       } else {
         mailboxesOutput += `
         <li data-icon="info">
-          <a onclick="showMailboxInformation('${mailbox.id}')" href="#messages-page">
-          ${mailbox.address}
+          <a onclick="showMailboxInformation('${key}')" href="#messages-page">
+          ${mailboxes[key].address}
           </a>
         </li>
       `;
       }
-      
-    });
+
+    }
+    //console.log(mailboxesCount);
+    //console.log(messagesCount);
+
     $("#mailboxes-count .count").text(mailboxesCount);
     $("#messages-count .count").text(messagesCount);
     $("#mailboxes").html(mailboxesOutput).listview('refresh');
-   });
+  });
 }
 
 // Messages
 function showMailboxInformation(mailboxId) {
   //console.log(mailboxId);
-  $.getJSON( "data.json", function( data ) {
-    let messagesOutput = '';
-    $.each( data.mailboxes, function( index, mailbox ) {
-      if(mailboxId == mailbox.id) {
-        $('#mailbox-address').text(mailbox.address);
-        //console.log(mailbox.messages);
-        if(mailbox.messages) {
-          $.each(mailbox.messages, function( key, message ) {
-            messagesOutput += `
-              <li data-icon="info">
-              <a onclick="showMessageDetails('${mailbox.id}', '${message.messageId}')" href="#message-details">
-              Reseived on ${message.date}
-              </a>
-              </li>
-            `;
-          
-          });
-          $("#messages").show();
-          $("#remove-mailbox-btn").show();
-          $("#messages").next("p").hide();
-          $("#messages").html(messagesOutput).listview('refresh');
-        }
-        if(mailbox.messages == null) {
-          //console.log(mailbox.messages);
-          messagesOutput = `
-          <p style="text-align:center;">There are no messages in this mailbox. Please go back.</p>
-          `;
-          $("#messages").hide();
-          $("#remove-mailbox-btn").hide();
-          if(!$("#messages").next("p").length) {
-            $("#messages").after(messagesOutput);
-          } else {
-            $("#messages").next("p").show();
-          }
-        }
-      }  
-    });
+  var database = firebase.database();
+  var ref = database.ref('mailboxes/' + mailboxId);
+  ref.on('value', function(data) {
+    //console.log(data.val());
+    var mailbox = data.val();
+    $('#mailbox-address').text(mailbox.address);
+
+    var messagesOutput = '';
+    if(mailbox.messages) {
+      var messages = mailbox.messages;
+      //console.log(messages);
+      $.each(messages, function(key, message) {
+        messagesOutput += `
+            <li data-icon="info">
+            <a onclick="showMessageDetails('${mailboxId}', '${key}')" href="#message-details">
+            Reseived on ${message.date}
+            </a>
+            </li>
+        `;
+      });
+      $("#messages").show();
+      $("#remove-mailbox-btn").show();
+      $("#messages").next("p").hide();
+      $("#messages").html(messagesOutput).listview('refresh');
+    }
+    else {
+      messagesOutput = `
+      <p style="text-align:center;">There are no messages in this mailbox. Please go back.</p>
+      `;
+      $("#messages").hide();
+      $("#remove-mailbox-btn").hide();
+      if(!$("#messages").next("p").length) {
+        $("#messages").after(messagesOutput);
+      } else {
+        $("#messages").next("p").show();
+      }
+    }
+
   });
 }
 
@@ -90,24 +101,39 @@ function showMailboxInformation(mailboxId) {
 function showMessageDetails(mailboxId, messageId) {
   //console.log(mailboxId);
   //console.log(messageId);
-  $.getJSON( "data.json", function( data ) {
-    let messageDetailsOutput = '';
-    $.each( data.mailboxes, function( index, mailbox ) {
-      if(mailboxId == mailbox.id) {
-        if(mailbox.messages) {
-          $.each(mailbox.messages, function( key, message ) {
-            if(message.messageId == messageId) {
-              $('#message-received-on').text(message.date);
-              messageDetailsOutput += `
-              <img src="${message.image}" style="width: 320px"/>
-            `;
-            }
-          });
-          $("#message-info").html(messageDetailsOutput);
-        }
-      }
-    });
+  
+  var database = firebase.database();
+  var ref = database.ref('mailboxes/' + mailboxId );
+  ref.on('value', function(data) {
+    var messageDetailsOutput = '';
+    if(data.val().messages) {
+      var message = data.val().messages[messageId];
+      //console.log(message);
+      $('#message-received-on').text(message.date);
+      messageDetailsOutput += `
+        <img id="message-details-img" src="${message.image}" style="width:320px" />
+      `;
+    }
+    
+    $("#message-received-on-title").text("Message received on");
+    $("#remove-mailbox-btn").show();
+    $("#message-info").html(messageDetailsOutput);
+    $("#message-info").attr("data-mailboxid", mailboxId);
+    $("#message-info").attr("data-messageid", messageId);
   });
+}
+
+function removeMail() {
+  var mailboxId = $("#message-info").data("mailboxid");
+  var messageId = $("#message-info").data("messageid");
+  //console.log(mailboxId);
+  //console.log(messageId);
+  firebase.database().ref('mailboxes/' + mailboxId + '/messages/' + messageId).remove();
+  $("#message-details-img").remove();
+  $("#message-received-on-title").text("");
+  $("#message-received-on").text("");
+  $("#remove-mailbox-btn").hide();
+  $("#message-details").trigger("updatelayout");
 }
 
 function invokeSignalrManager(){
@@ -129,6 +155,17 @@ $('#mailbox-behaviour-switch').change(function(event) {
 
 function acceptMessageBtnClicked() {
   $("#accept-message-container").show().delay(3000).fadeOut(); //show accept message
+
+  var mailboxId = "-LCZFn574A554rJO0AQw";
+  var mailboxMessages = firebase.database().ref('mailboxes/' + mailboxId + '/messages');
+  var newMail = {
+    messageId: "mail-" + mailboxId,
+    date: new Date().toString(),
+    image: $("#new-mail-request-image").attr("src"),
+    ocrText: $("#new-mail-request-text").text()
+  };
+  mailboxMessages.push(newMail);
+
   clearInterval(setTimer); //stop timer
   timeExpired(true, "the mailbox was opened");
 }

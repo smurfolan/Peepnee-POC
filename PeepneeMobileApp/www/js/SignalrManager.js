@@ -14,7 +14,7 @@ class SignalrManager {
   Initialize(){
     var connection = $.hubConnection(this.hubUrlAddress, {useDefaultPath: false});
     var peepneeHub = connection.createHubProxy(this.hubName);
-
+    
     peepneeHub.on('newMailRequest', this.newMailRequest);
 
     connection.start()
