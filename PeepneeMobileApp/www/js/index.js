@@ -1,11 +1,41 @@
 document.addEventListener('deviceready', this.onDeviceReady, false);
 
 var setTimer;
+var sendTime;
 var defaultMailboxId = "-LCn1v6jBKNlBZPM4Gg6";
 
 function onDeviceReady(){
   invokeSignalrManager();
+  cordova.plugins.notification.local.on("click", function () {
+    var now = new Date().getTime();
+    /* There are some cases, which we track:
+        1. if the user clicks the notification on time: the user see notification page with timer and three action buttons
+            1.1 if the user answers on time: the user is redirect to homepage with confirmation message for the action which is taken
+            1.2 if the user doesn't answer on time: after the time expired the action buttons are replaced with homepage button
+        2. if the user doesn't click the notification on time: time was expired and the user see notification page with homepage button   
+    */
+    
+    $("#notification-page-link").trigger("click");
+    if(now - sendTime <= 15000) {
+        timeExpired(false, ""); // case 1
+        startTimer();
+    } else {
+        timeExpired(true, "the time expired"); // case 2
+        pushMessgeToMailbox();
+    }           
+  });
   getMailboxes();
+}
+
+function PushNotification(takenPictureUrl, ocrParsedText){
+  $("#new-mail-request-image").attr("src", takenPictureUrl);
+  $("#new-mail-request-text").text(ocrParsedText);
+  sendTime = new Date().getTime();   
+  cordova.plugins.notification.local.schedule({
+      title: "You are receiving a mail",
+      text: "Do you want to open the mailbox?",
+      foreground: true
+  });
 }
 
 // Mailboxes page

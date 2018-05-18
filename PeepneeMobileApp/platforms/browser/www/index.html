@@ -154,7 +154,7 @@
             <div data-role="popup" id="popupRemoveMailbox" data-theme="a" class="ui-corner-all">
                 <form>
                     <div style="padding:10px 20px;">
-                        <a href="#messages-page" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
+                        <a href="#message-details" class="ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext" style="margin: 0px;"></a>
                         <h3>Please confirm removing the message</h3>
                         <a href="#message-received-on" onclick="removeMail();" id="remove-mailbox-form" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-left " style="background: red; color:white;">Remove message</a>
                     </div>
@@ -193,41 +193,6 @@
     </div>
 
     <script type="text/javascript" src="cordova.js"></script>
-    <script>
-        //document.getElementById('notification-page-link').click(); 
-        function PushNotification(takenPictureUrl, ocrParsedText){
-            $("#new-mail-request-image").attr("src", takenPictureUrl);
-            $("#new-mail-request-text").text(ocrParsedText);
-            var sendTime = new Date().getTime();   
-            cordova.plugins.notification.local.schedule({
-                title: "You are receiving a mail",
-                text: "Do you want to open the mailbox?",
-                foreground: true
-            });
-            
-            cordova.plugins.notification.local.on("click", function () {
-                var now = new Date().getTime();
-
-                /* There are some cases, which we track:
-                    1. if the user clicks the notification on time: the user see notification page with timer and three action buttons
-                        1.1 if the user answers on time: the user is redirect to homepage with confirmation message for the action which is taken
-                        1.2 if the user doesn't answer on time: after the time expired the action buttons are replaced with homepage button
-                    2. if the user doesn't click the notification on time: time was expired and the user see notification page with homepage button   
-                */
-                
-                //document.getElementById('notification-page-link').click();
-                $("#notification-page-link").trigger("click");
-                if(now - sendTime <= 15000) {
-                    timeExpired(false, ""); // case 1
-                    startTimer();
-                } else {
-                    timeExpired(true, "the time expired"); // case 2
-                    pushMessgeToMailbox();
-                }            
-            });
-        }
-
-</script>	
     <script type="text/javascript" src="js/index.js"></script>   
 </body>
 
