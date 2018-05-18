@@ -7,7 +7,7 @@ class SignalrManager {
   }
 
   newMailRequest(takenPictureUrl, ocrParsedText) {
-    //alert(takenPictureUrl + "\n" + ocrParsedText);
+    //alert(new Date().getTime());
     PushNotification(takenPictureUrl, ocrParsedText);
   }
 
@@ -17,6 +17,7 @@ class SignalrManager {
     
     peepneeHub.on('newMailRequest', this.newMailRequest);
 
+    //alert("start method");
     connection.start()
 				.done(function(){ 
           console.log('Now connected, connection ID=' + connection.id);

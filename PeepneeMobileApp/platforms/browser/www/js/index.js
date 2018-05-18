@@ -1,6 +1,7 @@
 document.addEventListener('deviceready', this.onDeviceReady, false);
 
 var setTimer;
+var defaultMailboxId = "-LCn1v6jBKNlBZPM4Gg6";
 
 function onDeviceReady(){
   invokeSignalrManager();
@@ -9,6 +10,7 @@ function onDeviceReady(){
 
 // Mailboxes page
 function getMailboxes() {
+  //console.log("getMailboxes() is invoke");
   var database = firebase.database();
   var ref = database.ref('mailboxes');
   ref.on('value', function(data) {
@@ -55,6 +57,7 @@ function getMailboxes() {
 
 // Messages
 function showMailboxInformation(mailboxId) {
+  //console.log("showMailboxInformation() is invoke");
   //console.log(mailboxId);
   var database = firebase.database();
   var ref = database.ref('mailboxes/' + mailboxId);
@@ -79,7 +82,7 @@ function showMailboxInformation(mailboxId) {
       $("#messages").show();
       $("#remove-mailbox-btn").show();
       $("#messages").next("p").hide();
-      $("#messages").html(messagesOutput).listview('refresh');
+      $("#messages").html(messagesOutput).listview().listview('refresh');
     }
     else {
       messagesOutput = `
@@ -99,8 +102,9 @@ function showMailboxInformation(mailboxId) {
 
 // Message details
 function showMessageDetails(mailboxId, messageId) {
-  //console.log(mailboxId);
-  //console.log(messageId);
+  //console.log("showMessageDetails() is invoke");
+  //console.log("showMessageDetails", mailboxId);
+  //console.log("showMessageDetails", messageId);
   
   var database = firebase.database();
   var ref = database.ref('mailboxes/' + mailboxId );
@@ -108,11 +112,13 @@ function showMessageDetails(mailboxId, messageId) {
     var messageDetailsOutput = '';
     if(data.val().messages) {
       var message = data.val().messages[messageId];
-      //console.log(message);
-      $('#message-received-on').text(message.date);
-      messageDetailsOutput += `
-        <img id="message-details-img" src="${message.image}" style="width:320px" />
-      `;
+      if(message) {
+        //console.log(message);
+        $('#message-received-on').text(message.date);
+        messageDetailsOutput += `
+          <img id="message-details-img" src="${message.image}" style="width:320px" />
+        `; 
+      }
     }
     
     $("#message-received-on-title").text("Message received on");
@@ -120,14 +126,19 @@ function showMessageDetails(mailboxId, messageId) {
     $("#message-info").html(messageDetailsOutput);
     $("#message-info").attr("data-mailboxid", mailboxId);
     $("#message-info").attr("data-messageid", messageId);
+    //console.log("showMessageDetails-2", mailboxId);
+    //console.log("showMessageDetails-2", messageId);
   });
 }
 
 function removeMail() {
-  var mailboxId = $("#message-info").data("mailboxid");
-  var messageId = $("#message-info").data("messageid");
-  //console.log(mailboxId);
-  //console.log(messageId);
+  //console.log("removeMail() is invoke");
+  $("#message-info").trigger("updatelayout");
+  //console.log($("#message-info"));
+  var mailboxId = $("#message-info").attr("data-mailboxid");
+  var messageId = $("#message-info").attr("data-messageid");
+  //console.log("removeMail", mailboxId);
+  //console.log("removeMail", messageId);
   firebase.database().ref('mailboxes/' + mailboxId + '/messages/' + messageId).remove();
   $("#message-details-img").remove();
   $("#message-received-on-title").text("");
@@ -153,18 +164,21 @@ $('#mailbox-behaviour-switch').change(function(event) {
   $("#default-time-container").toggle();
 });
 
+function pushMessgeToMailbox() {
+    var mailboxMessages = firebase.database().ref('mailboxes/' + defaultMailboxId + '/messages');
+    var newMail = {
+      messageId: "mail-" + defaultMailboxId,
+      date: new Date().toString(),
+      image: $("#new-mail-request-image").attr("src"),
+      ocrText: $("#new-mail-request-text").text()
+    };
+    mailboxMessages.push(newMail);
+}
+
 function acceptMessageBtnClicked() {
   $("#accept-message-container").show().delay(3000).fadeOut(); //show accept message
 
-  var mailboxId = "-LCZFn574A554rJO0AQw";
-  var mailboxMessages = firebase.database().ref('mailboxes/' + mailboxId + '/messages');
-  var newMail = {
-    messageId: "mail-" + mailboxId,
-    date: new Date().toString(),
-    image: $("#new-mail-request-image").attr("src"),
-    ocrText: $("#new-mail-request-text").text()
-  };
-  mailboxMessages.push(newMail);
+  pushMessgeToMailbox();
 
   clearInterval(setTimer); //stop timer
   timeExpired(true, "the mailbox was opened");
@@ -189,6 +203,7 @@ function startTimer() {
 
     if(count === 0) {
       timeExpired(true, "the time expired"); // case 1.2
+      pushMessgeToMailbox();
       clearInterval(setTimer);
     }
     count--;
